@@ -13,8 +13,10 @@
 #include <set>
 #include <string>
 #include <unordered_set>
+#include <random>
+#include <sstream>
 
-std::string kYourName = "STUDENT TODO"; // Don't forget to change this!
+std::string kYourName = "Jerry Xing"; // Don't forget to change this!
 
 /**
  * Takes in a file name and returns a set containing all of the applicant names as a set.
@@ -28,7 +30,15 @@ std::string kYourName = "STUDENT TODO"; // Don't forget to change this!
  * to also change the corresponding functions in `utils.h`.
  */
 std::set<std::string> get_applicants(std::string filename) {
-  // STUDENT TODO: Implement this function.
+  std::ifstream ifs(filename);
+  std::set<std::string> nameset;
+  if (ifs.is_open()){
+    std::string name;
+    while(std::getline(ifs,name)){
+      nameset.insert(name);
+    }
+  }
+  return nameset;
 }
 
 /**
@@ -39,8 +49,31 @@ std::set<std::string> get_applicants(std::string filename) {
  * @param students  The set of student names.
  * @return          A queue containing pointers to each matching name.
  */
+
+std::string initials(std::string name){
+  std::stringstream ss(name);
+  std::string first;
+  std::string last;
+  ss >> first >> last;
+  std::string initial;
+  initial += first[0];
+  initial += ',';
+  initial += last[0];
+  return initial;
+}
+
 std::queue<const std::string*> find_matches(std::string name, std::set<std::string>& students) {
-  // STUDENT TODO: Implement this function.
+  std::string name_i;
+  name_i = initials(name);
+  std::queue<const std::string*> stu_que;
+  std::string student_i;
+  for(const auto& stu:students){
+    student_i = initials(stu);
+    if(student_i == name_i){
+      stu_que.push(&stu);
+    }
+  }
+  return stu_que;
 }
 
 /**
@@ -54,7 +87,26 @@ std::queue<const std::string*> find_matches(std::string name, std::set<std::stri
  *                Will return "NO MATCHES FOUND." if `matches` is empty.
  */
 std::string get_match(std::queue<const std::string*>& matches) {
-  // STUDENT TODO: Implement this function.
+  std::string theone;
+  if (matches.empty()) {
+        theone = "NO MATCHES FOUND.";
+        return theone;
+    }
+
+    int n = matches.size();
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> dist(0, n - 1);
+
+    int k = dist(gen);
+
+    for (int i = 0; i < k; i++) {
+        matches.pop();
+    }
+
+    theone = *matches.front();
+    return theone;
 }
 
 /* #### Please don't remove this line! #### */
