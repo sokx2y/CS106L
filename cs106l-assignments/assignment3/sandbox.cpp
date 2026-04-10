@@ -3,6 +3,14 @@
  * Created by Fabio Ibanez with modifications by Jacob Roberts-Baca.
  */
 
+#include <iostream>
+#include "class.h"
+
 void sandbox() {
-  // STUDENT TODO: Construct an instance of your class!
+  Panamera myCar;   
+
+  Panamera myPanamera("Xiangyu Xing", "black", 0, 50.0);  
+  std::cout << myPanamera.getowner() << std::endl;
+  myPanamera.setengineON(true);
+  myPanamera.drive(100);
 }
